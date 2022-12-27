@@ -64,6 +64,8 @@ if __name__ == "__main__":
     # Should be representation of the faces with linear combination of 10 eigen vectors
     weights = np.dot(faces_m.T, keigenvectors)
 
+    np.savez("PCA.npz", weights=weights, avg_v=avg_v, keigenvectors=keigenvectors)
+
     # reconstructing the faces from the weights and the eigen vectors
     # multiply the weights with the eigen vectors
     reconstructed_faces = np.dot(weights, keigenvectors.T)
