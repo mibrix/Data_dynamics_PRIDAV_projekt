@@ -6,10 +6,10 @@ from Preprocessing import process_image, download_haarcascade
 
 basepath = pathlib.Path(__file__).parent.absolute()
 # check if the haarcascade is downloaded, since this is a repo it should be
-if not basepath.joinpath("haarcascade_frontalface_default.xml").exists():
+if not basepath.joinpath("cascades","haarcascade_frontalface_default.xml").exists():
     download_haarcascade()
 # Create the face cascade classifier
-face_cascade = cv2.CascadeClassifier(str(basepath.joinpath("haarcascade_frontalface_default.xml")))
+face_cascade = cv2.CascadeClassifier(str(basepath.joinpath("cascades","haarcascade_frontalface_default.xml")))
 
 data = np.load("PCA.npz")
 weights = data["weights"]
@@ -20,7 +20,7 @@ faces_names = data["faces_names"]
 # Load the image to test
 test_image = "vinar1.jpg"
 # grayscales the image, detects the face and centers it and resizes it to 100x100 pixels
-processed_image = process_image(str(basepath.joinpath("test_photos", test_image)), face_cascade, basepath)
+processed_image = process_image(str(basepath.joinpath("test_photos", test_image)), face_cascade)
 base_processed_image = processed_image.copy()
 
 # Flatten the image

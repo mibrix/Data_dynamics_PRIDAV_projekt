@@ -11,10 +11,10 @@ def list_images_full():
 def download_haarcascade():
     import urllib.request
     url = "https://raw.githubusercontent.com/opencv/opencv/master/data/haarcascades/haarcascade_frontalface_default.xml"
-    urllib.request.urlretrieve(url, basepath.joinpath("haarcascade_frontalface_default.xml"))
+    urllib.request.urlretrieve(url, basepath.joinpath("cascades", "haarcascade_frontalface_default.xml"))
 
 
-def process_image(image, cascade, basepath, scale=1.1, minNeighbors=5, minSize=(30, 30)):
+def process_image(image, cascade, scale=1.1, minNeighbors=5, minSize=(30, 30)):
     """
     Preprocess images with face detection and center the faces
     :param image: image to process
@@ -24,9 +24,9 @@ def process_image(image, cascade, basepath, scale=1.1, minNeighbors=5, minSize=(
     :return: list of faces sorted by size - the biggest face is the first (should be the true positive)
     """
     # load the image using OpenCV, convert it to grayscale
-    image = cv2.imread(image,0)
+    image = cv2.imread(image, 0)
     gray = image
-    #gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    # gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     # I would resize them but someone at the website admin team did it for me
     # But I would do it like this:
     # gray = cv2.resize(gray, (300, 200))
@@ -57,7 +57,7 @@ def process_images(cascade, basepath):
     # iterate over images
     for image in tqdm(images):
         # process the image, reffer to the function documentation
-        faces = process_image(str(basepath.joinpath("photos", image)), cascade, basepath)
+        faces = process_image(str(basepath.joinpath("photos", image)), cascade)
         # save the faces
         savepath = basepath.joinpath("faces", image)
         # we know that there is only one face in the image
@@ -70,8 +70,8 @@ def process_images(cascade, basepath):
 if __name__ == "__main__":
     basepath = pathlib.Path(__file__).parent.absolute()
     # check if the haarcascade is downloaded, since this is a repo it should be
-    if not basepath.joinpath("haarcascade_frontalface_default.xml").exists():
+    if not basepath.joinpath("cascades", "haarcascade_frontalface_default.xml").exists():
         download_haarcascade()
     # Create the face cascade classifier
-    face_cascade = cv2.CascadeClassifier(str(basepath.joinpath("haarcascade_frontalface_default.xml")))
+    face_cascade = cv2.CascadeClassifier(str(basepath.joinpath("cascades", "haarcascade_frontalface_default.xml")))
     process_images(face_cascade, basepath)
