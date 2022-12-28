@@ -36,6 +36,7 @@ pomocou 1000 a jedného hromadných download manažérov.
 ## Zdroje
 ### Dáta
 - https://sluzby.fmph.uniba.sk/f
+- https://fmph.uniba.sk/pracoviska/
 ### Analýza
 - https://www.geeksforgeeks.org/ml-face-recognition-using-eigenfaces-pca-algorithm
 - 
