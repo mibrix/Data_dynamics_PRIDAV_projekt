@@ -4,7 +4,7 @@ import sqlite3
 import os
 import csv
 
-path = './faces/'
+path = '../faces/'
 
 # Making a GET request
 primary = 'https://fmph.uniba.sk'
@@ -26,7 +26,7 @@ katedra = None
 s = s[:3] + s[4:]
 count_f = 0
 count_t = 0
-file = open('fakulty.csv','w',encoding='utf-8')
+file = open('fakulty.csv', 'w', encoding='utf-8')
 writer = csv.writer(file)
 for _ in s:
 
