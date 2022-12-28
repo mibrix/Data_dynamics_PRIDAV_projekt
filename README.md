@@ -114,10 +114,10 @@ Na všetky tieto problémy je PCA náchylné, pretože sa vypočítava len váh 
 - Viacero obrázkov z jednej osoby idealne v rôznych pozíciách, s rôznym osvetlením, s rôznym výrazom, ...
 - Obrázky vyžsieho rozlíšenia, na riadne pred spracovanie tváre, ideálne .PNG
 - Použitie iného predikčného modelu, ako napríklad SVM, ktorý vie používať nelineárne rozhodovacie hranice.
+
 ## Miso
 
-### Data labeling pomocou scrapingu
-
+### Data labeling pomocou scrapingu - DONE (možno, keď sa podarí nájsť aj úspešnosť žiakov) 
 ### Klasifikácia katedier pomocou X
 
 ## Max
@@ -144,6 +144,7 @@ Na všetky tieto problémy je PCA náchylné, pretože sa vypočítava len váh 
 ### Dáta
 
 - https://sluzby.fmph.uniba.sk/f
+- https://fmph.uniba.sk/pracoviska/
 
 ### Analýza
 
