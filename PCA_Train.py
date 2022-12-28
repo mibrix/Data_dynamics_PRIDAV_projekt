@@ -50,27 +50,43 @@ if __name__ == "__main__":
     # stack them in a matrix
     faces_m = np.stack(norm_faces_v)
     # Compute the covariance matrix
-    cov_m = np.cov(faces_m)
+    #cov_m = np.cov(faces_m)
+
+    cov_m = np.dot(faces_m.T, faces_m)
+
     # Compute the eigenvalues and eigenvectors
-    eigenvalues, eigenvectors = np.linalg.eig(cov_m)
+    compute_eig = False  # it takes like 5 min on 8+8 cores don't do it if you don't have to
+    if compute_eig:
+        eigenvalues, eigenvectors = np.linalg.eig(cov_m)
+        # save the eigenvalues and eigenvectors
+        np.savez_compressed("eigen.npz", eigenvalues=eigenvalues.real, eigenvectors=eigenvectors.real)
+    else:
+        eigenvalues, eigenvectors = np.load("eigen.npz")["eigenvalues"], np.load("eigen.npz")["eigenvectors"]
+
     # Sort the eigenvalues and eigenvectors
     idx = eigenvalues.argsort()[::-1]
     # select the first 10 eigenvalues and eigenvectors
-    k = 10
+    k = 25
     keigenvalues = eigenvalues[idx][:k]
     keigenvectors = eigenvectors[:, idx][:, :k]
     # Stack the eigenvectors into a matrix instead of a list of arrays
-    keigenvectors = np.stack(keigenvectors)
+    keigenvectors = np.stack(keigenvectors).real
+    # normalize the eigenvectors
+    keigenvectors = keigenvectors / np.linalg.norm(keigenvectors, axis=0)
     # Should be representation of the faces with linear combination of 10 eigen vectors
-    weights = np.dot(faces_m.T, keigenvectors)
-
-    np.savez("PCA.npz", weights=weights, avg_v=avg_v, keigenvectors=keigenvectors)
+    weights = np.dot(faces_m, keigenvectors)
+    # Save the weights, the average face, and the eigenvalues and eigenvectors
+    np.savez("PCA.npz",
+             weights=weights,
+             avg_v=avg_v,
+             keigenvectors=keigenvectors,
+             faces_names=faces_names)
 
     # reconstructing the faces from the weights and the eigen vectors
     # multiply the weights with the eigen vectors
-    reconstructed_faces = np.dot(weights, keigenvectors.T)
+    reconstructed_faces = np.dot(weights, keigenvectors.real.T)
     # add the average face
-    reconstructed_faces = reconstructed_faces.T + avg_v
+    reconstructed_faces = reconstructed_faces + avg_v
     # reshape the faces to 2D 100x100
     reconstructed_faces = reconstructed_faces.reshape(-1, 100, 100)
     # convert the faces to uint8, so they can be saved as images
