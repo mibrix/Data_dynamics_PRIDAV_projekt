@@ -17,7 +17,7 @@ pomocou 1000 a jedného hromadných download manažérov.
 ### PCA *Testing*
 
 ## Miso
-### Data labeling pomocou scrapingu 
+### Data labeling pomocou scrapingu - DONE (možno, keď sa podarí nájsť aj úspešnosť žiakov) 
 ### Klasifikácia katedier pomocou X
 
 ## Max
