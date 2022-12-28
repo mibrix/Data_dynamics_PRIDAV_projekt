@@ -14,7 +14,7 @@ def download_haarcascade():
     urllib.request.urlretrieve(url, basepath.joinpath("haarcascade_frontalface_default.xml"))
 
 
-def process_image(image, scale=1.1, minNeighbors=5, minSize=(30, 30)):
+def process_image(image, cascade, basepath, scale=1.1, minNeighbors=5, minSize=(30, 30)):
     """
     Preprocess images with face detection and center the faces
     :param image: image to process
@@ -24,8 +24,9 @@ def process_image(image, scale=1.1, minNeighbors=5, minSize=(30, 30)):
     :return: list of faces sorted by size - the biggest face is the first (should be the true positive)
     """
     # load the image using OpenCV, convert it to grayscale
-    image = cv2.imread(str(basepath.joinpath("photos", image)))
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    image = cv2.imread(image,0)
+    gray = image
+    #gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     # I would resize them but someone at the website admin team did it for me
     # But I would do it like this:
     # gray = cv2.resize(gray, (300, 200))
@@ -34,7 +35,7 @@ def process_image(image, scale=1.1, minNeighbors=5, minSize=(30, 30)):
     # # Empirical evidence shows that the Haar Cascade is sufficient for this task on this dataset# #
 
     # detect faces in the grayscale image
-    rects = face_cascade.detectMultiScale(gray, scaleFactor=scale, minNeighbors=minNeighbors, minSize=minSize)
+    rects = cascade.detectMultiScale(gray, scaleFactor=scale, minNeighbors=minNeighbors, minSize=minSize)
     # there should be only one face in the image but just in case
     faces = []
     for (x, y, w, h) in rects:
@@ -50,13 +51,13 @@ def process_image(image, scale=1.1, minNeighbors=5, minSize=(30, 30)):
     return faces_resized
 
 
-def process_images():
+def process_images(cascade, basepath):
     # get image names
     images = list_images_full()
     # iterate over images
     for image in tqdm(images):
         # process the image, reffer to the function documentation
-        faces = process_image(image)
+        faces = process_image(str(basepath.joinpath("photos", image)), cascade, basepath)
         # save the faces
         savepath = basepath.joinpath("faces", image)
         # we know that there is only one face in the image
@@ -73,7 +74,4 @@ if __name__ == "__main__":
         download_haarcascade()
     # Create the face cascade classifier
     face_cascade = cv2.CascadeClassifier(str(basepath.joinpath("haarcascade_frontalface_default.xml")))
-
-    process_images()
-
-
+    process_images(face_cascade, basepath)
