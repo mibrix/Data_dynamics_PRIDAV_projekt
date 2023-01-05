@@ -133,6 +133,7 @@ Na všetky tieto problémy je PCA náchylné, pretože sa vypočítava len váh 
 ## Ondro
 
 ### Klasifikácia pohlavia pomocou SVM
+test
 
 ## Nástroje
 
