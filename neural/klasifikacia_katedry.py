@@ -39,15 +39,15 @@ test_labels = t_labels[270:]
 model = tf.keras.Sequential([
     tf.keras.layers.Flatten(input_shape=(50, 50)),
     tf.keras.layers.Dense(1000, activation='sigmoid'),
-    tf.keras.layers.Dense(10)
+    tf.keras.layers.Dense(10,activation='sigmoid')
 ])
 
 model.compile(optimizer='adam',
-              loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+              loss=tf.keras.losses.SparseCategoricalCrossentropy(),
               metrics=['accuracy'])
 
 
-model.fit(train_photos, train_labels, epochs=150)
+model.fit(train_photos, train_labels, epochs=100)
 
 test_loss, test_acc = model.evaluate(test_photos,  test_labels, verbose=2)
 
