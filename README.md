@@ -118,7 +118,7 @@ Na všetky tieto problémy je PCA náchylné, pretože sa vypočítava len váh 
 ## Miso
 
 ### Data labeling pomocou scrapingu - DONE (možno, keď sa podarí nájsť aj úspešnosť žiakov) 
-### Klasifikácia katedier pomocou neuronóvej siete
+### Klasifikácia katedier pomocou neuronóvej siete (https://www.tensorflow.org/tutorials/keras/classification)
 
 ## Max
 

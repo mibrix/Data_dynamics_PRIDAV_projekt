@@ -16,7 +16,7 @@ c = conn.cursor()
 c.execute("DROP TABLE IF EXISTS persons")
 c.execute('''
           CREATE TABLE persons
-          (id INTEGER PRIMARY KEY AUTOINCREMENT , meno TEXT, katedra TEXT , oddelenie TEXT, funkcia TEXT )
+          (id INTEGER PRIMARY KEY AUTOINCREMENT , meno TEXT,meno_skratka TEXT, katedra TEXT , oddelenie TEXT, funkcia TEXT )
           ''')
 
 # Parsing the HTML
@@ -49,13 +49,13 @@ for _ in s:
                 m = tag.select('a')[0]
                 meno = m.text
                 link = m['href']
-
-                if os.path.exists(path + link.split('/')[-1].strip() + '.jpg'):
+                skratka = link.split('/')[-1].strip() + '.jpg'
+                if os.path.exists(path + skratka):
                     c.execute('''
-                    INSERT INTO persons (meno,katedra,oddelenie,funkcia)
-                    VALUES(?,?,?,?); 
-                    ''', (meno, katedra, oddelenie, funkcia))
-                    writer.writerow((meno, katedra, oddelenie, funkcia))
+                    INSERT INTO persons (meno,meno_skratka,katedra,oddelenie,funkcia)
+                    VALUES(?,?,?,?,?); 
+                    ''', (meno,skratka ,katedra, oddelenie, funkcia))
+                    writer.writerow((meno,skratka, katedra, oddelenie, funkcia))
                     count_t += 1
                 else:
                     count_f += 1
@@ -86,12 +86,13 @@ for _ in s:
                 if tag.select('a')[0]['href'][:10] != "javascript":
                     meno = tag.select('a')[0].text
                     link = tag.select('a')[0]['href']
-                    if os.path.exists(path + link.split('/')[-1].strip() + '.jpg'):
+                    skratka = link.split('/')[-1].strip() + '.jpg'
+                    if os.path.exists(path + skratka):
                         c.execute('''
-                        INSERT INTO persons (meno,katedra,oddelenie,funkcia)
-                        VALUES(?,?,?,?); 
-                        ''',(meno,katedra,oddelenie,funkcia))
-                        writer.writerow((meno, katedra, oddelenie, funkcia))
+                                        INSERT INTO persons (meno,meno_skratka,katedra,oddelenie,funkcia)
+                                        VALUES(?,?,?,?,?); 
+                                        ''', (meno, skratka, katedra, oddelenie, funkcia))
+                        writer.writerow((meno, skratka, katedra, oddelenie, funkcia))
                         count_t += 1
                     else:
                         count_f += 1
