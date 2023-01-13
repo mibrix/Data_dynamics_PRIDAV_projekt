@@ -130,6 +130,9 @@ Na všetky tieto problémy je PCA náchylné, pretože sa vypočítava len váh 
 
 ### Clustering podľa podobnosťi
 
+* Kmeans
+* Affinity propagation
+
 ## Ondro
 
 ### Klasifikácia pohlavia
