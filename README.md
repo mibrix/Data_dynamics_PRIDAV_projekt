@@ -117,8 +117,23 @@ Na všetky tieto problémy je PCA náchylné, pretože sa vypočítava len váh 
 
 ## Miso
 
-### Data labeling pomocou scrapingu - DONE (možno, keď sa podarí nájsť aj úspešnosť žiakov) 
+### Data labeling pomocou scrapingu https://fmph.uniba.sk/pracoviska/
+Samotný scraping robený pre zamestnancov fakulty z uvedenej webstránky. Do scv a db súboru som uložil výsledky scrapingu, podľa toho či má zamestnanec fotku.
+Samtoné dolované dáta sú: celé meno s titulmi, katedra a oddelenie v ktorom pracuje, samotná funkcia zamestnanca.
+Jedna stránka mala iný html kód než druhé, preto v kóde je naviac if-else klauzula.
+Priečinok ./scraping
+.py súbor je samotný kód scrapingu a .sql je sql kód pre .db súbor. Tu filtrujem dáta aby z každej skupiny bolo aspoň 10 a vytváram unikatné označenie pre každú katedru.
+
+
+
 ### Klasifikácia katedier pomocou neuronóvej siete (https://www.tensorflow.org/tutorials/keras/classification)
+Zo scrapnutých dát som sa pokúsil vytvoriť neurónku pre klasifikáciu katedry, v ktorej zamestnanec pracuje. Je ich 277, čiže veľa ich veľmi nie je. Rozdelil som ich na 250 trénovacích a 27 testovacích.
+Ako prvé som zobral dáta zo samotnej fotky (vektor všetkých pixelov) a najväčšiu úspešnosť klasifikácie na testovacích som mal okolo 60% so skúšaním rôznych sietí.
+Potom som použil vektory z PCA ako vstup. Výhoda je, že namiesto 100*100 rozmerného vstupu, mám len 25 rozmerný vstup(k-rozmerny z PCA). Takže trénovanie je oveľa rýchlejšie a takisto je možné lepšie experimentovať so sieťou.
+Nanajvýš sieť dosahovala na testovacích dátach podobnú úspešnosť ako pri vstupe s celou fotkou.
+
+Priečinok ./neural
+
 
 ## Max
 ### Predikcia počtu titulov podľa random forest classifieru a neuronovej siete
@@ -133,7 +148,7 @@ Vidíme že počet titulov sa veľmi líši ({3.0: 71, 2.0: 50, 1.0: 34, 0.0: 10
 Random forest má mnoho parametrov ktorá sa dajú nastavovať, jednoduchý grid search vrátil najlepšie parametre (s tým že random state bol prednastavený na 4646) {'n_estimators': 1000, 'min_samples_split': 10, 'min_samples_leaf': 4, 'max_features': 'sqrt', 'max_depth': 100, 'bootstrap': False}
 Random forest s týmito parametrami má úspešnosť 0.49. S takto malým datasetom som sa ani nezaoberal rýchlosťou.
 #### Neuronova siet
-Tiež somsa rozhodol vyskúšať neurónovú sieť, dáta predspracujem rovnako ako pri random foreste (scraping etc.), rozhodol som sa spraviť 2 vrstvy, obidve sigmoid. Ostatné parametre som ponechal rovnaké ako v učebnicovom príklade na klasifikáciu obrázkov. Po vycvičení na 100 epochách má neuronova sieť úspešnosť 50%~.
+Tiež som sa rozhodol vyskúšať neurónovú sieť, dáta predspracujem rovnako ako pri random foreste (scraping etc.), rozhodol som sa spraviť 2 vrstvy, obidve sigmoid. Ostatné parametre som ponechal rovnaké ako v učebnicovom príklade na klasifikáciu obrázkov. Po vycvičení na 100 epochách má neuronova sieť úspešnosť 50%~.
 ### Záver
 Random forest ani neuronova sieť nedokázali dostatočne dobre predikovať počet titulov podľa tváre ktorá prešla PCA. Ako jedno z vysvetlení je málo dát alebo nedostatočná korelácia medzi počtom titulov a tvárou, napr. je viac zamestnancov čo budú starší teda ich rozdiel tvári nebude tak veľký ako medzi mladším a starším kolegom etc.
 ### Oversampling and undersampling
@@ -206,3 +221,4 @@ Program vytvorí 100 F1 skór pre každu kombináciu (veľkosť bázy eigenvekto
 - https://www.geeksforgeeks.org/ml-face-recognition-using-eigenfaces-pca-algorithm
 - https://github.com/dim4o/gender-recognizer/blob/master/Gender%20Classification.ipynb
 - https://imbalanced-learn.org/stable/over_sampling.html
+- https://www.tensorflow.org/tutorials/keras/classification

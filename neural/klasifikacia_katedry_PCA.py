@@ -1,10 +1,9 @@
-import cv2
 import sqlite3
 import numpy as np
 import numpy.random
 import tensorflow as tf
 
-img = cv2.imread("../reconstructed/adamekova3.jpg",cv2.IMREAD_GRAYSCALE)
+
 
 
 
@@ -14,7 +13,9 @@ labels = con.execute('SELECT * FROM labels').fetchall()
 
 con.close()
 
+pca = np.load('../PCA.npz')
 
+print(pca['weights'].flatten().min(),pca['weights'].flatten().max())
 
 numpy.random.shuffle(data)
 t_labels = []
@@ -23,22 +24,27 @@ for per in data:
     for label in labels:
         if per[0] == label[1]:
             t_labels.append(label[0] - 1)
-            t_photos.append(cv2.resize(cv2.imread("../reconstructed/"  + per[1],cv2.IMREAD_GRAYSCALE),(50,50), interpolation = cv2.INTER_AREA))
+            index = np.where(pca['faces_names'] == per[1])
+            index = index[0][0]
+            t_photos.append(list(pca['weights'][index]))
 
 
 
-print(len(t_photos),len(t_photos[0]))
+
+
 t_labels = np.array(t_labels)
 t_photos = np.array(t_photos)
-t_photos = t_photos / 255
-train_photos = t_photos[:260]
-train_labels = t_labels[:260]
-test_photos = t_photos[260:]
-test_labels = t_labels[260:]
+train_photos = t_photos[:250]
+train_labels = t_labels[:250]
+test_photos = t_photos[250:]
+test_labels = t_labels[250:]
 
 model = tf.keras.Sequential([
-    tf.keras.layers.Flatten(input_shape=(50, 50)),
-    tf.keras.layers.Dense(1000, activation='sigmoid'),
+    tf.keras.layers.Flatten(input_shape=[25]),
+    tf.keras.layers.Dense(50, activation='sigmoid'),
+    tf.keras.layers.Dense(60,activation='sigmoid'),
+    tf.keras.layers.Dense(50,activation='sigmoid'),
+    tf.keras.layers.Dense(20,activation='sigmoid'),
     tf.keras.layers.Dense(10,activation='sigmoid')
 ])
 
@@ -47,7 +53,7 @@ model.compile(optimizer='adam',
               metrics=['accuracy'])
 
 
-model.fit(train_photos, train_labels, epochs=150)
+model.fit(train_photos, train_labels, epochs=600)
 
 test_loss, test_acc = model.evaluate(test_photos,  test_labels, verbose=2)
 
