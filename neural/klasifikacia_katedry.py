@@ -31,10 +31,10 @@ print(len(t_photos),len(t_photos[0]))
 t_labels = np.array(t_labels)
 t_photos = np.array(t_photos)
 t_photos = t_photos / 255
-train_photos = t_photos[:270]
-train_labels = t_labels[:270]
-test_photos = t_photos[270:]
-test_labels = t_labels[270:]
+train_photos = t_photos[:260]
+train_labels = t_labels[:260]
+test_photos = t_photos[260:]
+test_labels = t_labels[260:]
 
 model = tf.keras.Sequential([
     tf.keras.layers.Flatten(input_shape=(50, 50)),
@@ -47,7 +47,7 @@ model.compile(optimizer='adam',
               metrics=['accuracy'])
 
 
-model.fit(train_photos, train_labels, epochs=100)
+model.fit(train_photos, train_labels, epochs=150)
 
 test_loss, test_acc = model.evaluate(test_photos,  test_labels, verbose=2)
 
