@@ -121,10 +121,26 @@ Na všetky tieto problémy je PCA náchylné, pretože sa vypočítava len váh 
 ### Klasifikácia katedier pomocou neuronóvej siete (https://www.tensorflow.org/tutorials/keras/classification)
 
 ## Max
-
-### Predikcia veku pomocou X
-
-### Predikcia poctu titulov pomocou X
+### Predikcia počtu titulov podľa random forest classifieru a neuronovej siete
+#### Problém
+Ako zaujímavá aplikácia klasifikácie ľudských tvári je predikcia veku, keďže dáta ohľadom veku sa nedajú  tak ľahko získať, rozhodol som sa tento problém redukovať na počet titulov (očakávam že vyšší vek bude korelovaný s väčším počtom titulov).
+#### Postup
+Najprv bude potrebné scrapenuť dáta zo stránky fakulty, tento proces je celkom triviálny (časť scraping). Celé meno s počtom titulov bude treba potom namapovať na už spravenú PCA (časť PCA). Po namapovaní jednoduchou algebrou vieme spojiť dáta do jednej matice a s pomocou ML knižníc vieme dáta rozdeliť na tréningové a testovacia. Na koniec len zvolíme model ktorý chceme použiť, rozhodol som sa pre random forest classifier kvôli malému množstvu dát a pre neurónovú sieť.
+#### Dáta
+Vidíme že počet titulov sa veľmi líši ({3.0: 71, 2.0: 50, 1.0: 34, 0.0: 10}) (pri random test splite so seedom 666), najprv vyskúšame random forest a neuronovu sieť bez aplikácie over a undersamplingu, potom sa pozrieme ako sa accuracy zmení ak duplikujeme dáta.
+### No oversampling/undersampling
+#### Random forest
+Random forest má mnoho parametrov ktorá sa dajú nastavovať, jednoduchý grid search vrátil najlepšie parametre (s tým že random state bol prednastavený na 4646) {'n_estimators': 1000, 'min_samples_split': 10, 'min_samples_leaf': 4, 'max_features': 'sqrt', 'max_depth': 100, 'bootstrap': False}
+Random forest s týmito parametrami má úspešnosť 0.49. S takto malým datasetom som sa ani nezaoberal rýchlosťou.
+#### Neuronova siet
+Tiež somsa rozhodol vyskúšať neurónovú sieť, dáta predspracujem rovnako ako pri random foreste (scraping etc.), rozhodol som sa spraviť 2 vrstvy, obidve sigmoid. Ostatné parametre som ponechal rovnaké ako v učebnicovom príklade na klasifikáciu obrázkov. Po vycvičení na 100 epochách má neuronova sieť úspešnosť 50%~.
+### Záver
+Random forest ani neuronova sieť nedokázali dostatočne dobre predikovať počet titulov podľa tváre ktorá prešla PCA. Ako jedno z vysvetlení je málo dát alebo nedostatočná korelácia medzi počtom titulov a tvárou, napr. je viac zamestnancov čo budú starší teda ich rozdiel tvári nebude tak veľký ako medzi mladším a starším kolegom etc.
+### Oversampling and undersampling
+#### Random forest
+Keďže máme málo dát rozhodol som sa použiť len oversampling, a to zvýšením počtu entries pre ľudí s 0 a 1 titulom na 42 (medián), po aplikovaní najlepší parametrov dostanem accuracy 0.53, čo je veľmi malé zlepšenie.
+#### Neuronova siet
+Po upravení parametrov neurónovej siete má horšiu performance ako neuronka pred oversamplingom
 
 ## Mirka
 
