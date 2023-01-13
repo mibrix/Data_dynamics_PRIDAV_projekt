@@ -132,7 +132,43 @@ Na všetky tieto problémy je PCA náchylné, pretože sa vypočítava len váh 
 
 ## Ondro
 
-### Klasifikácia pohlavia pomocou SVM
+### Klasifikácia pohlavia
+
+#### Labeling
+
+V prvom rade bolo potrebné olabelovať fotky podľa pohlavia. Riešenie tohto problemu bolo hybridné. Najprv program označí všetky fotky s názvom(priezvisko) so sufixom "ova" ako osoby ženského pohlavia číselnou hodnotou 0 a všetky ostané ako osoby mužského pohlavia číselnou hodnotou 1. Následne som prešiel všetky fotky a určil osoby ženského pohlavia ktorých priezvisko nemá sufix "ova".
+
+Dataset disponuje celkovým 348 fotkami z čoho 228 (cca 66%) fotiek obsahuje osobu mužského pohlavia a 120 (cca 34%) osobu ženského pohlavia. Dataset má teda nevyvážené triedy.
+
+#### Hľadanie najlepšieho modelu
+
+Keďže je dataset nevyvážený je na mieste využiť resamplovacie metódy. Konkrétne:
+- Random undersampling: náhodne vymaže dáta z viac početnej triedy tak aby počty dát v triedach rovnali
+- Random oversampling: náhodne duplikuje dáta z menej početnej triedy tak aby počty dát v triedach rovnali
+- SMOTE: vytvorí hrany medzi dátami menej početnej triedy a na tieto hrany náhodne pridá dátové body
+- ADASYN: od metódy SMOTE sa líši iba v tom, že nové umelé dáta môžu byť mierne vychýlené od hrany medzi bodmi
+
+Na trénovanie modelu som použil vektory váh (ktoré slúžia na rekonštrukciu jednotlivých fotiek).
+
+Modely ktorých výkon som porovnával:
+- Logistická regresia
+- Random forest
+- SVC s RFC (Radial basis function) kernelom
+- Decision tree
+
+Samotné hľadanie spočíva v trénovaní vyššie spomenutých modelov za použitia vyššie spomenutých resamplovacích metód a rôznych veľkostí bázy eigenvektorov (5,10,20,30,40,50,70,90,110,135,160,190,250,300).
+
+Príklad iterácie hľadania:
+1. Zober vektory váh o dĺžky 5
+2. Použi jednu z resamplovacích metód na vstupné dáta
+3. Rozdel dataset na trénovací (70%) a testovací (30%)
+4. Natrénuj modely
+5. Zaznamenaj F1 skóre modelu
+
+Pri resamplovacích metódach, ktoré dáta vytvárajú umelo (ADASYN a SMOTE) sa kroky 2. a 3. robia v opačnom poradí aby sa umelo vytvorené dáta nedostali do validačnej množiny.
+
+Program vytvorí 100 F1 skór pre každu kombináciu (veľkosť bázy eigenvektorov, resamplovacia metóda, model). Na vizualizáciu výsledkov som využil boxploty, ktoré ukázali, že najlpešiu výkonnosť dosahuje SVC pri všetkých resamplovacích metódach okrem random under-samplingu. Ako veľmi dobrá kombinácia sa tiež ukázala Random forest + over-sampling. Medzi vymenovanými kombináciami nie je veľmi markantný rozdiel, avšak kombinácia SVC + SMOTE pri veľkostiach báz 40 a vyššie najčastejšie prekračuje strednou hodnotou F1 skóre 0.93 a zároveň má relatívne nízku varianciu čo by danú kombináciu mohlo klasifikovať ako najlepšiu.
+
 
 ## Nástroje
 
@@ -149,4 +185,5 @@ Na všetky tieto problémy je PCA náchylné, pretože sa vypočítava len váh 
 ### Analýza
 
 - https://www.geeksforgeeks.org/ml-face-recognition-using-eigenfaces-pca-algorithm
-- 
+- https://github.com/dim4o/gender-recognizer/blob/master/Gender%20Classification.ipynb
+- https://imbalanced-learn.org/stable/over_sampling.html
