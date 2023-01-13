@@ -8,6 +8,7 @@ import tensorflow as tf
 
 
 
+
 con = sqlite3.connect('../scraping/database.db')
 data = con.execute('SELECT * FROM important').fetchall()
 labels = con.execute('SELECT * FROM labels').fetchall()
