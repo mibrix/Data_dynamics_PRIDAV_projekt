@@ -162,10 +162,15 @@ Po upravení parametrov neurónovej siete má horšiu performance ako neuronka p
 ### Clustering podľa podobnosťi
 #### clustering.ipynb
 
+Na základe váh, získaných pomocou PCA, chceli sme rozdeliť dáta do clusterov.
+
 Pri danej metóde je potrebne vopred zadať počet zhlukov, avšak v našom prípade bolo ťažko povedať nejaké konkrétne číslo. Preto sme použili Elbow method. Z grafu je vidieť, zem „lakeť“ je približne okolo hodnoty 50. Aby sme to overili, vykreslili sme aj silhoette score, maximálna hodnota grafu by mala zodpovedať „najlepšej“ hodnote n, avšak v danom prípade to nebolo jasne.
 Pre daný počet clusterov sme získali 32 clustery, ktoré obsahovali 6+ ľudí a následne sme ich aj vykreslili.
 
 Rozhodli sme sa skúsiť aj inú metódu, ktorá nepotrebuje vopred zadaný počet clusterov, napríklad Affinity Propagation, ktorá sa nachádza v knižnici sklearn. Dostali sme 28 clusterov, v 23 z nich bolo 7 a viac ľudí.
+
+Porovnávali sme dane metódy pomocou metriky adjusted_rand_score, ktorá je symetrická a nadobúda hodnotu 0, ak hodnoty sú náhodne, a 1, ak rozdelenie do clusterov je identické. V našom prípade hodnota bola 0.4096, čo hovorí o tom, že rozdelenie do clusterov pomocou pôvodného KMeans(50) a AffinityPropation su celkom podobne.
+
 
 ## Ondrej Gajdoš
 
@@ -227,3 +232,4 @@ Program vytvorí 100 F1 skór pre každu kombináciu (veľkosť bázy eigenvekto
 - https://www.tensorflow.org/tutorials/keras/classification
 - https://scikit-learn.org/stable/modules/clustering.html#silhouette-coefficient
 - https://scikit-learn.org/stable/modules/clustering.html#affinity-propagation
+- https://scikit-learn.org/stable/modules/generated/sklearn.metrics.adjusted_rand_score.html
