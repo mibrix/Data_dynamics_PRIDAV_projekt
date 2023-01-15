@@ -13,7 +13,7 @@ Tieto dáta boli uložené vo verejne dostupnom adresáry na webe fakulty ,
 tým padom sme ich nemuseli scrapovať ale bolo ich možné priamo hromadne stiahnuť
 pomocou 1000 a 1 hromadných download manažérov.
 
-## Adam
+## Adam Chrenko
 
 ### Preprocessing
 
@@ -115,7 +115,7 @@ Na všetky tieto problémy je PCA náchylné, pretože sa vypočítava len váh 
 - Obrázky vyžsieho rozlíšenia, na riadne pred spracovanie tváre, ideálne .PNG
 - Použitie iného predikčného modelu, ako napríklad SVM, ktorý vie používať nelineárne rozhodovacie hranice.
 
-## Miso
+## Michal Chymo
 
 ### Data labeling pomocou scrapingu https://fmph.uniba.sk/pracoviska/
 Samotný scraping robený pre zamestnancov fakulty z uvedenej webstránky. Do scv a db súboru som uložil výsledky scrapingu, podľa toho či má zamestnanec fotku.
@@ -135,7 +135,7 @@ Nanajvýš sieť dosahovala na testovacích dátach podobnú úspešnosť ako pr
 Priečinok ./neural
 
 
-## Max
+## Maximilián Zivák
 ### Predikcia počtu titulov podľa random forest classifieru a neuronovej siete
 #### Problém
 Ako zaujímavá aplikácia klasifikácie ľudských tvári je predikcia veku, keďže dáta ohľadom veku sa nedajú  tak ľahko získať, rozhodol som sa tento problém redukovať na počet titulov (očakávam že vyšší vek bude korelovaný s väčším počtom titulov).
@@ -157,14 +157,17 @@ Keďže máme málo dát rozhodol som sa použiť len oversampling, a to zvýše
 #### Neuronova siet
 Po upravení parametrov neurónovej siete má horšiu performance ako neuronka pred oversamplingom
 
-## Mirka
+## Myroslava Hrechyn
 
 ### Clustering podľa podobnosťi
+#### clustering.ipynb
 
-* Kmeans
-* Affinity propagation
+Pri danej metóde je potrebne vopred zadať počet zhlukov, avšak v našom prípade bolo ťažko povedať nejaké konkrétne číslo. Preto sme použili Elbow method. Z grafu je vidieť, zem „lakeť“ je približne okolo hodnoty 50. Aby sme to overili, vykreslili sme aj silhoette score, maximálna hodnota grafu by mala zodpovedať „najlepšej“ hodnote n, avšak v danom prípade to nebolo jasne.
+Pre daný počet clusterov sme získali 32 clustery, ktoré obsahovali 6+ ľudí a následne sme ich aj vykreslili.
 
-## Ondro
+Rozhodli sme sa skúsiť aj inú metódu, ktorá nepotrebuje vopred zadaný počet clusterov, napríklad Affinity Propagation, ktorá sa nachádza v knižnici sklearn. Dostali sme 28 clusterov, v 23 z nich bolo 7 a viac ľudí.
+
+## Ondrej Gajdoš
 
 ### Klasifikácia pohlavia
 
@@ -222,3 +225,5 @@ Program vytvorí 100 F1 skór pre každu kombináciu (veľkosť bázy eigenvekto
 - https://github.com/dim4o/gender-recognizer/blob/master/Gender%20Classification.ipynb
 - https://imbalanced-learn.org/stable/over_sampling.html
 - https://www.tensorflow.org/tutorials/keras/classification
+- https://scikit-learn.org/stable/modules/clustering.html#silhouette-coefficient
+- https://scikit-learn.org/stable/modules/clustering.html#affinity-propagation
